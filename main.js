@@ -1,11 +1,29 @@
-var Hello = React.createClass({
-  render: function() {
-              return <div>Hello {this.props.name}</div>;
+'use strict'
+var Task = React.createClass({
+render: function() {
+            return <div>1 + 2 = 3</div>;
+          }
+});
+
+var CheckButton = React.createClass({
+render: function() {
+            return <button>Проверить</button>;
+          }
+});
+
+var App = React.createClass({
+render: function() {
+          return (
+              <div>
+                  <div className="header"> Реши примеры: </div>
+                  <div><Task /></div>
+                  <div> <CheckButton /> </div>
+              </div>
+            )
             }
 });
 
 ReactDOM.render(
-      <Hello name="World" />,
-        document.getElementById('container')
+      <App/>,
+        document.getElementById('app')
     );
-
