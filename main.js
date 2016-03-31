@@ -54,7 +54,7 @@ var Task = React.createClass({
     return this.props.value === parseInt(this.state.answer, 10);
   },
   render: function() {
-    return <div className='task'><span >{this.props.text} = </span> <input type="text" onChange={this.handleChange}  value={this.state.answer}/> <span>({this.props.value})</span></div>;
+    return <div className='task'><span >{this.props.text} = </span> <input type="text" onChange={this.handleChange}  value={this.state.answer}/> <span className='hide'>({this.props.value})</span></div>;
   }
 });
 
