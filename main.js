@@ -12,10 +12,11 @@ var dataTasks = [];
 var generator = new Generator();
 var exp;
 
-var tasks_in_page = 5;
+var task_level = 4;
+var tasks_in_page = 20;
 
 for (var i = 0; i < tasks_in_page; i++) {
-  exp = generator.generate(3);
+  exp = generator.generate(generator._getRandomNumber(4,3));
   dataTasks.push({
     id: i,
     text: exp.print(),
@@ -23,8 +24,6 @@ for (var i = 0; i < tasks_in_page; i++) {
   });
 }
 
-
-console.log(dataTasks);
 
 var Tasks = React.createClass({
 
