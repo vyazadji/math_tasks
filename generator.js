@@ -2,8 +2,8 @@ function Generator(max1, min1) {
   this.config = {
     MAX: 100,
     MIN: 1,
-    MAX_DIVIDEND: 60,
-    MAX_DIVIDER: 6,
+    MAX_DIVIDEND: 100,
+    MAX_DIVIDER: 10,
     MAX_MULTIPLIER: 10
   };
 

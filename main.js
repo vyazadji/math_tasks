@@ -3,7 +3,6 @@
 /*
 var dataTasks = [
   {id: 1, text: "1+2", value: 3},
-  {id: 2, text: "2*2", value: 4},
 ];
 */
 var dataTasks = [];
@@ -13,10 +12,10 @@ var generator = new Generator();
 var exp;
 
 var task_level = 4;
-var tasks_in_page = 20;
+var tasks_in_page = 40;
 
 for (var i = 0; i < tasks_in_page; i++) {
-  exp = generator.generate(generator._getRandomNumber(4,3));
+  exp = generator.generate(generator._getRandomNumber(4,2));
   dataTasks.push({
     id: i,
     text: exp.print(),
@@ -44,7 +43,10 @@ var Tasks = React.createClass({
 
 var Task = React.createClass({
   getInitialState: function() {
-    return {answer: null};
+    return {
+      answer: null,
+      isError: false
+    };
   },
 
   handleChange : function(event) {
@@ -54,7 +56,8 @@ var Task = React.createClass({
     return this.props.value === parseInt(this.state.answer, 10);
   },
   render: function() {
-    return <div className='task'><span >{this.props.text} = </span> <input type="text" onChange={this.handleChange}  value={this.state.answer}/> <span className='hide'>({this.props.value})</span></div>;
+    var css_class = this.state.isError ? 'error_border' : '';
+    return <div className="task"><span >{this.props.text} = </span> <input type="text" className={css_class} onChange={this.handleChange}  value={this.state.answer}/> <span className='hide'>({this.props.value})</span></div>;
   }
 });
 
@@ -63,7 +66,8 @@ var App = React.createClass({
   getInitialState: function() {
     return {
       messageClass: 'hide',
-      messageText: ''
+      messageText: '',
+      results: []
     };
   },
   checkTasks: function() {
@@ -71,29 +75,49 @@ var App = React.createClass({
     var tasks = this.refs.tasks.refs;
     var errors = 0;
     for (var taskName in tasks) {
-      if (!tasks[taskName].isValid()) errors++
+      var task = tasks[taskName];
+      if (!task.isValid()) {
+        errors++
+        task.setState({"isError": true})
+      } else {
+        task.setState({"isError": false})
+      }
     }
 
+    var attempt = this.state.results.length + 1;
+
+    var strResult = `Попытка ${attempt}:`;
+    var result = {};
     if(errors > 0) {
-      this.setState({
+      result = {
         messageClass: 'error',
-        messageText: "У тебя есть ошибки: " + errors + " неправильных примеров"
-      })
+        messageText: strResult + "У тебя есть ошибки: " + errors + " неправильных примеров"
+      }
     } else {
-      this.setState({
+      result = {
         messageClass: 'ok',
-        messageText: 'Все правильно !'
-      })
+        messageText: strResult + "Ура !. Все правильно !"
+      };
     }
+
+
+    this.setState({"results": this.state.results.concat([result])})
 
   },
   render: function() {
+    console.log(this.state.results)
+      debugger;
+    var results = this.state.results.map(function (result) {
+      return <div className={result.messageClass}>{result.messageText}</div>
+    })
     return (
       <div>
         <div className="header"> Реши примеры: </div>
         <div><Tasks ref='tasks' tasks={dataTasks}/></div>
         <div> <button onClick={this.checkTasks}>Проверить</button> </div>
-        <div className={this.state.messageClass}>{this.state.messageText}</div>
+        <div>
+          {results}
+        </div>
       </div>
       )
   }
